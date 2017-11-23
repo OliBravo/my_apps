@@ -1,0 +1,29 @@
+' Writing into csv file
+Sub WriteTextFile()
+    Dim rng As Range
+    Dim i As Long, j As Long
+    Dim cellValue As Variant
+    Dim filePath As String
+    
+    filePath = "C:\Users\jakub.malecki\Documents\Carl Wilh. Meyer\CW_Meyer\client_data\Angebotspositionen\Angebotspositionen.csv"
+    
+    ActiveWorkbook.ActiveSheet.Cells(1, 1).Select
+    
+    Set rng = ActiveCell.CurrentRegion
+    'i = rng.Rows.Count
+    'j = rng.Columns.Count
+    
+    Open filePath For Output As #1
+    For i = 1 To rng.Rows.Count
+        For j = 1 To rng.Columns.Count
+            cellValue = Cells(i, j).Value
+            If j = rng.Columns.Count Then
+                Write #1, cellValue
+            Else
+                Write #1, cellValue,
+            End If
+        Next j
+    Next i 
+    
+    
+End Sub
