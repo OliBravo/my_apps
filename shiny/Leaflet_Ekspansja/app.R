@@ -13,8 +13,9 @@ ui <- bootstrapPage(
   
   absolutePanel(
     top = 20,
-    left = 20,
+    right = 20,
     fixed = T,
+    draggable = T,
     
     actionButton("btnGenerate", "Generate data"),
     
