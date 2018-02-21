@@ -1,0 +1,53 @@
+html, body {
+  
+}
+
+
+#login-failed {
+  top: 50%;
+  left: 0;
+  display: none;
+  background: #f5c6c6;
+  font-size: 0.9em;
+}
+
+
+#login-container {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  margin-left: -100px;
+  /*border: solid 1px black;
+  height: 50%;*/
+}
+
+
+#succ_login {
+  /* width: 15%;*/
+  position: relative;
+  top: 0;
+  left: 0;
+  color: white;
+  background: gray;
+  border: solid 1px black;
+  display: inline;
+}
+
+#logout {
+  position: relative;
+  top: 0;
+  right: 0;
+  display: inline;
+}
+
+.log-container {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 50px;
+  font-size: 0.8em;
+}
+
+.col-sm-4{
+  width: 20%;
+}
