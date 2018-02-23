@@ -1,6 +1,6 @@
 set role postgres;
 
-revoke all privileges on all tables in schema public from mike;
+/*revoke all privileges on all tables in schema public from mike;
 revoke all privileges on all tables in schema public from jon;
 
 revoke connect on database dvdrental from mike;
@@ -8,9 +8,10 @@ revoke connect on database dvdrental from jon;
 
 drop role mike;
 drop role jon;
+*/
 
-create role mike;
-create role jon;
+create role mike with login;
+create role jon with login;
 
 grant connect on database dvdrental to mike;
 grant connect on database dvdrental to jon;
