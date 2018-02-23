@@ -27,9 +27,7 @@ renderLoginPage <- function(){
         
         id = "login-failed",
         
-        # tags$div(
         "Unable to connect to the database."
-        # )
         
       )
     ),
@@ -42,6 +40,8 @@ renderLoginPage <- function(){
 
 
 renderAuthorised <- function(){
+  
+  # when authorization is succesful a user is presented a page with customer information
   
   fluidPage(
     
@@ -62,51 +62,36 @@ renderAuthorised <- function(){
     
     sidebarLayout(
       sidebarPanel(
-        numericInput("cust_id",
-                     label = "Customer ID:",
-                     min = 1,
-                     max = 1,
-                     value = 1)
+        
+        tags$p("This is a sample database application. It connects to a PostgreSQL server running on localhost.
+               There are security policies defined in the database, so depending on which user is currently logged in
+               different customer recordest is returned."),
+        
+        tags$p("The application is very simple, but the purpose was to show how user authentication can be implemented.
+               Users' logins are the same as in the database. Access to the content is managed entirely by the database's
+               privilege system.")
       ),
       
       mainPanel(
         
         wellPanel(
-          tags$label("Customer ID:"),
-          textOutput("rst_cust_id", inline = T),
-          tags$br(),
           
-          tags$label("First name:"),
-          textOutput("rst_fname", inline = T),
-          tags$br(),
+          tableOutput("tblRst"),
           
-          tags$label("Last name:"),
-          textOutput("rst_lname", inline = T),
-          tags$br(),
-          
-          tags$label("Address 1:"),
-          textOutput("rst_address1", inline = T),
-          tags$br(),
-          
-          tags$label("Address 2:"),
-          textOutput("rst_address2", inline = T)
-          # tags$br()
-          
+          tags$div(
+            
+            class = "recordset-nav",
+            
+            actionButton("btnPrev", "< Previous"),
+            
+            actionButton("btnNext", " Next >"),
+            
+            textOutput("txtInfo", inline = T)  
+            
+          )
         )    
       )
     )
     
-  )
-}
-
-
-
-renderAccessDenied <- function(){
-  
-  fluidPage(
-    
-    tags$div("Access denied. You have no permission to see the content."),
-    
-    actionButton("btnBackToLogin", label = "Sign In")
   )
 }

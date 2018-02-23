@@ -51,3 +51,31 @@ html, body {
 .col-sm-4{
   width: 20%;
 }
+
+
+.recordset-nav {
+  font-size: 0.8em;
+  padding-top: 10px;
+  border-top: solid 1px #d2d2d2;
+  
+}
+
+.recordset-nav button {
+  border-radius: 0;
+  font-size: 0.9em;
+  width: 80px;
+}
+
+.recordset-nav span {
+  margin: 0 10px;
+}
+
+
+p {
+  border: solid 1px #d2d2d2;
+  border-radius: 4px;
+  background: #fdfdfd;
+  box-shadow: 1px 1px 3px gray;
+  padding: 5px;
+  color: cadetblue;
+}

@@ -11,6 +11,8 @@ library(shiny)
 library(shinyjs)
 library(DBI)
 library(RPostgres)
+library(dplyr)
+library(tidyr)
 
 source("rendering_functions.R")
 source("database_functions.R")
@@ -19,24 +21,30 @@ source("database_functions.R")
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
   
-  user <- reactiveValues(logged = FALSE)
+  user <- reactiveValues(logged = FALSE) # to track if a user's logged in
   
-  db_res <- reactive({
+  cursor <- reactiveValues(position = 1) # resulting recordset navigation
+  
+  db_res <- eventReactive(input$btnLogin, {
+    
+    # returns a recordset with customer information;
+    # row level security policies are defined in the database, so we don't have to
+    # handle security issues in the code; instead we can just query the database and
+    # the database is responsible for the results.
     
     cnx <- db_connect(input$txtLogin, input$txtPassword)
     
+    
     validate(
-      need(cnx, message = F)
+      need(cnx, message = "Unable to connect to the database.")
     )
     
     
-    res <- RPostgres::dbSendQuery(
+    rst <- queryDB(
       cnx,
-      "select * from customers where customerid = $1",
-      params = list(input$cust_id)
+      sql = "select * from customer order by customer_id"
     )
     
-    rst <- dbFetch(res)
     
     dbDisconnect(cnx)
     
@@ -45,15 +53,16 @@ shinyServer(function(input, output, session) {
   
   
   observe({
+    # which page should we render:
     
     if (!user$logged){
-      
+      # user's not logged tho the database
       output$page <- renderUI({
         
         renderLoginPage()
       })
     } else {
-      
+      # user is authorized to see the content
       output$page <- renderUI({
         
         renderAuthorised()
@@ -63,7 +72,7 @@ shinyServer(function(input, output, session) {
   
   
   observeEvent(input$btnLogin, {
-    
+
 
     cnx <- db_connect(input$txtLogin, input$txtPassword)
 
@@ -73,70 +82,66 @@ shinyServer(function(input, output, session) {
       shinyjs::toggle("login-failed", condition = T)
 
     } else {
-      
+
       user$logged <- TRUE
-      
-      hlp_res <- RPostgres::dbSendQuery(
-        cnx,
-        statement = "select max(customerid) from customers"
-      )
-      
-      max_cust_id <- dbFetch(hlp_res)
-      
-      
-      updateNumericInput(
-        session,
-        inputId = "cust_id",
-        max = max_cust_id
-      )
-      
+
       dbDisconnect(cnx)
+
     }
   })
   
   
-  # output$customers <- renderTable({
-  #   
-  #   cnx <- db_connect(input$txtLogin, input$txtPassword)
-  #   
-  #   validate(
-  #     need(cnx, message = F)
-  #   )
-  #   
-  #   
-  #   res <- RPostgres::dbSendQuery(
-  #     cnx,
-  #     "select * from customers where customerid = $1",
-  #     params = list(input$cust_id)
-  #   )
-  #   
-  #   db_res$rst <- dbFetch(res)
-  #   
-  #   
-  #   dbDisconnect(cnx)
-  #   
-  #   db_res$rst
+  observeEvent(input$btnNext, {
+    
+    cursor$position <- min(cursor$position + 1, 599)
+  })
+  
+  
+  observeEvent(input$btnPrev, {
+    
+    cursor$position <- max(1, cursor$position - 1)
+  })
+  
+  
+  output$tblRst <- renderTable({
+    
+    validate(
+      need(db_res(), message = "The recordset is empty.")
+    )
+
+    db_res()[cursor$position,] %>% gather()
+    
+  })
+  
+  
+  # output$rst_cust_id <- renderText({
+  #   db_res()$customerid
+  # })
+  # 
+  # output$rst_fname <- renderText({
+  #   db_res()$firstname
+  # })
+  # 
+  # output$rst_lname <- renderText({
+  #   db_res()$lastname
+  # })
+  # 
+  # output$rst_address1 <- renderText({
+  #   db_res()$address1
+  # })
+  # 
+  # output$rst_address2 <- renderText({
+  #   db_res()$address2
   # })
   
   
-  output$rst_cust_id <- renderText({
-    db_res()$customerid
-  })
-  
-  output$rst_fname <- renderText({
-    db_res()$firstname
-  })
-  
-  output$rst_lname <- renderText({
-    db_res()$lastname
-  })
-  
-  output$rst_address1 <- renderText({
-    db_res()$address1
-  })
-  
-  output$rst_address2 <- renderText({
-    db_res()$address2
+  observe({
+    
+    if (user$logged){
+      db_res()
+      cursor$position <- 1
+    }
+      
   })
   
   
@@ -145,5 +150,10 @@ shinyServer(function(input, output, session) {
     user$logged = FALSE
   })
   
+  
+  output$txtInfo <- renderText({
+    
+    sprintf("%i of %i records", cursor$position, nrow(db_res()))
+  })
   
 })
