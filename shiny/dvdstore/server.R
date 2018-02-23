@@ -93,7 +93,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$btnNext, {
     
-    cursor$position <- min(cursor$position + 1, 599)
+    cursor$position <- min(cursor$position + 1, nrow(db_res()))
   })
   
   

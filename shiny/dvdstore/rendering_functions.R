@@ -65,10 +65,10 @@ renderAuthorised <- function(){
         
         tags$p("This is a sample database application. It connects to a PostgreSQL server running on localhost.
                There are security policies defined in the database, so depending on which user is currently logged in
-               different customer recordest is returned."),
+               a different customer recordest is returned."),
         
         tags$p("The application is very simple, but the purpose was to show how user authentication can be implemented.
-               Users' logins are the same as in the database. Access to the content is managed entirely by the database's
+               Users' logins are the same as in the database. Access to the content is managed entirely by the PostgreSQL's
                privilege system.")
       ),
       
