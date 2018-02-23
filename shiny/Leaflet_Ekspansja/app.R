@@ -36,10 +36,10 @@ ui <- bootstrapPage(
 server <- function(input, output, session){
   
   distM <- reactive({
-
-    validate(
-      need(map_points$lng, message = F)
-    )
+  
+    
+    if (!is.null(need(map_points$lng, message = F)))
+      return(NULL)
     
     
     pp <- as.data.frame(cbind(map_points$lng,
@@ -132,10 +132,9 @@ server <- function(input, output, session){
   
   observe({
     
-    print(input$my_map_zoom)
     
     
-    try(
+    try({
       if (input$my_map_zoom <= 13){
       
       
@@ -172,16 +171,14 @@ server <- function(input, output, session){
           addMarkers(lng = mean(gr[,1]),
                      lat = mean(gr[,2]),
                      label = (paste("aggregated:", length(idx))))
-      }
-      
-      
-    } else {
+      }} else {
       
       leafletProxy("my_map") %>%
         clearMarkers() %>%
         addMarkers(lng = map_points$lng,
                    lat = map_points$lat,
                    label = map_points$id)
+      }
     })
   })
   

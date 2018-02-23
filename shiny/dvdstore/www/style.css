@@ -79,3 +79,17 @@ p {
   padding: 5px;
   color: cadetblue;
 }
+
+tbody {
+  background: antiquewhite;
+  box-shadow: 0 0 3px 3px lightgray;
+}
+
+tbody tr td:nth-child(2) {
+  font-family: courier;
+  background: white;
+}
+
+table thead {
+  display: none;
+}
