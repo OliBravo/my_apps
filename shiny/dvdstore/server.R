@@ -29,8 +29,7 @@ shinyServer(function(input, output, session) {
     
     # returns a recordset with customer information;
     # row level security policies are defined in the database, so we don't have to
-    # handle security issues in the code; instead we can just query the database and
-    # the database is responsible for the results.
+    # handle security issues in the code; instead we can just query the database.
     
     cnx <- db_connect(input$txtLogin, input$txtPassword)
     
@@ -56,7 +55,7 @@ shinyServer(function(input, output, session) {
     # which page should we render:
     
     if (!user$logged){
-      # user's not logged tho the database
+      # user's not logged in
       output$page <- renderUI({
         
         renderLoginPage()
@@ -112,27 +111,6 @@ shinyServer(function(input, output, session) {
     db_res()[cursor$position,] %>% gather()
     
   })
-  
-  
-  # output$rst_cust_id <- renderText({
-  #   db_res()$customerid
-  # })
-  # 
-  # output$rst_fname <- renderText({
-  #   db_res()$firstname
-  # })
-  # 
-  # output$rst_lname <- renderText({
-  #   db_res()$lastname
-  # })
-  # 
-  # output$rst_address1 <- renderText({
-  #   db_res()$address1
-  # })
-  # 
-  # output$rst_address2 <- renderText({
-  #   db_res()$address2
-  # })
   
   
   observe({

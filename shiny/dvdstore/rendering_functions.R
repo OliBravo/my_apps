@@ -69,7 +69,10 @@ renderAuthorised <- function(){
         
         tags$p("The application is very simple, but the purpose was to show how user authentication can be implemented.
                Users' logins are the same as in the database. Access to the content is managed entirely by the PostgreSQL's
-               privilege system.")
+               privilege system."),
+        
+        tags$p("Mike is allowed to see only customers asociated to Mike's store (store_id = 1). Similarly, Jon is allowed
+               to see only customers asociated to Jon's store (store_id = 2). Login 'web' is allowed to see all customers.")
       ),
       
       mainPanel(
