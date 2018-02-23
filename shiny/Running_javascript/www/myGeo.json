@@ -1,0 +1,10 @@
+{
+	"type": "FeatureCollection",
+	"features": [
+		"geometry": {
+			"coordinates" : [
+				[51,0], [51,10], [51, 20]
+			]
+		}
+	]
+}

@@ -1,0 +1,1 @@
+POLAND.GEOJSON taken from https://github.com/codeforamerica/click_that_hood/blob/master/public/data/
