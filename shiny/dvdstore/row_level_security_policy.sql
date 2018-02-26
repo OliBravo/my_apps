@@ -12,6 +12,7 @@ drop role jon;
 
 create role mike with login;
 create role jon with login;
+create role web with login;
 
 grant connect on database dvdrental to mike;
 grant connect on database dvdrental to jon;
@@ -22,18 +23,28 @@ to mike;
 grant select on customer
 to jon;
 
+grant select on customer
+	to web;
+
 
 alter user mike with password 'mike123';
 
 alter user jon with password 'jon123';
 
+alter user web with password 'web';
+
+
+
 -- defining row level security policies:
 alter table customer ENABLE ROW level SECURITY;
 
-alter policy customer_select on customer
-	with check (store_id = (select check_store_id(current_user)));
+create policy customer_select on customer
+	using (store_id = (select check_store_id(current_user)));
 
 
+create policy view_all_customer to web
+	using(true)
+	with check(true);
 
 
 -- test select:
