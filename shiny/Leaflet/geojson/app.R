@@ -45,7 +45,7 @@ server <- function(input, output, session){
   
   output$my_map <- renderLeaflet({
     
-    states <- geojsonio::geojson_read("json/poland.geojson", what = "sp", stringsAsFactors = F, encoding = "UTF-8", use_iconv = T)
+    states <- geojsonio::geojson_read("json/poland.geojson", what = "sp", stringsAsFactors = F)
     
     states@data$my_value <- sample(1:100, 16)
     
